@@ -1,6 +1,12 @@
 # Copyright 2020 (c) Cognizant Digital Business, Evolutionary AI. All rights reserved. Issued under the Apache 2.0 License.
 
 import argparse
+import os
+
+import numpy as np
+import pandas as pd
+
+from valencia_predictor import ValenciaPredictor
 
 
 def predict(start_date: str,
@@ -19,7 +25,32 @@ def predict(start_date: str,
     with columns "CountryName,RegionName,Date,PredictedDailyNewCases"
     """
     # !!! YOUR CODE HERE !!!
-    raise NotImplementedError
+    preds_df = predict_df(start_date, end_date, path_to_ips_file, verbose=False)
+    # Create the output path
+    os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
+    # Save to a csv file
+    preds_df.to_csv(output_file_path, index=False)
+    print(f"Saved predictions to {output_file_path}")    
+
+
+def predict_df(start_date_str: str, end_date_str: str, path_to_ips_file: str, verbose=False):
+    """
+    Generates a file with daily new cases predictions for the given countries, regions and npis, between
+    start_date and end_date, included.
+    :param start_date_str: day from which to start making predictions, as a string, format YYYY-MM-DDD
+    :param end_date_str: day on which to stop making predictions, as a string, format YYYY-MM-DDD
+    :param path_to_ips_file: path to a csv file containing the intervention plans between inception_date and end_date
+    :param verbose: True to print debug logs
+    :return: a Pandas DataFrame containing the predictions
+    """
+
+    # Load model
+    predictor = ValenciaPredictor()
+
+    # Make predictions
+    pred_df = predictor.predict_df(start_date_str, end_date_str, path_to_ips_file, verbose)
+
+    return pred_df
 
 
 # !!! PLEASE DO NOT EDIT. THIS IS THE OFFICIAL COMPETITION API !!!

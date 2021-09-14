@@ -86,7 +86,7 @@ def prescribe(start_date_str: str,
             ip_weights = geo_weights_df.values[0]
             # Multiply ip_weights by FEAT_IMPORTANCE
             ip_weights = ip_weights/np.asarray(FEAT_IMPORTANCE)
-            print(ip_weights)
+            #print(ip_weights)
             #ip_weights_feat = [];
             #ip_weights_feat.append(ip_weights * FEAT_IMPORTANCE)
             sorted_ips = [ip for _, ip in sorted(zip(ip_weights, ip_names))]
